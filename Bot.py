@@ -5,9 +5,9 @@ class AddressBook(UserDict):
 
 
 class Record:
-    def __init__(self, name):
+    def __init__(self, name, phones=[]):
         self.name = name
-        self.phones = []
+        self.phones = phones
 
     def add_phone(self, phone):
         self.phones.append(phone)
@@ -54,11 +54,12 @@ def input_error(func):
 
 @input_error
 def add(command, address_book):
-    name, phone = command.split()[1:]
+    name, *phones = command.split()[1:]
     record = Record(name)
-    record.add_phone(phone)
+    for phone in phones:
+        record.add_phone(phone)
     address_book[name] = record
-    return f"{name} added with phone number {phone}"
+    return f"{name} added with phone number: {', '.join(phones)}" if phones else f"{name} added without a phone number"
 
 
 @input_error
@@ -109,3 +110,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
